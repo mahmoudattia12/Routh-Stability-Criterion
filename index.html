@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@600;700&display=swap"
+        rel="stylesheet">
+    <title>Routh Stability Criteria</title>
+</head>
+
+<body>
+    <div id="container">
+        <div id="inputDiv">
+            <h1>Routh Stability Criterion</h1>
+            <label id="label_order" for="order">System Order:</label>
+            <input type="number" id="order" name="order" value="1" min="1" required><br>
+            <div id="coefficientsDiv"></div>
+            <button class="button" id="calculate" onclick="getCoefficients()">Solve</button>
+        </div>
+        <div id="outputDiv"></div>
+        <br>
+        <div id="stabilityDiv"></div>
+    </div>
+    <script src="routh.js"></script>
+</body>
+
+</html>
