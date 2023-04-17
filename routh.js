@@ -175,6 +175,7 @@ function calculateRouthArray(coefficients, order) {
 			}
 		}
 	}
+	//if not coming from recursion after case1 has been completely solved
 	if (!end) {
 		if (routhArray[order][0] >= 0) {
 			if (currSign == 'N') {
@@ -224,7 +225,7 @@ function calculateRouthArray(coefficients, order) {
 		}
 		div.appendChild(table);
 		outputDiv.appendChild(div);
-		//view system stabilty
+		//view system stabilty (Results)
 		var div = document.createElement("div");
 		const stabilityDiv = document.getElementById("stabilityDiv");
 		stabilityDiv.style.background = "white"
