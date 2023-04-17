@@ -8,10 +8,11 @@ const orderError = document.getElementById('order-error');
 const coeffError = document.getElementById('coeff-error');
 orderInput.addEventListener("input", function () {
 	var order = parseInt(this.value);
-	if (orderInput.value.trim() === '') {
+	if (orderInput.value.trim() === '' || order !==  Math.ceil(this.value) || order < 1) {
 		orderError.style.display = 'inline';
 	} else {
 		orderError.style.display = 'none';
+		coeffError.style.display = 'none';
 		if (order >= 0) {
 			createCoefficientsInputs(order);
 		}
@@ -48,12 +49,12 @@ function createCoefficientsInputs(order) {
 }
 
 function getCoefficients() {
-	var order = document.getElementById("order").value;
+	var order = parseInt(document.getElementById("order").value);
 	var outDiv = document.getElementById("outputDiv");
 	var ResDiv = document.getElementById("stabilityDiv");
 	var sep1 = document.getElementById("separator1");
 	var sep2 = document.getElementById("separator2");
-	if (orderInput.value.trim() === '') {
+	if (orderInput.value.trim() === '' || order !==  Math.ceil(orderInput.value) || order < 1) {
 		orderError.style.display = 'inline';
 		display(outDiv, ResDiv, sep1, sep2, 'hidden')
 	} else {
