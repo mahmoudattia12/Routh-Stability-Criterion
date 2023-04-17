@@ -4,10 +4,17 @@ if (defaultOrder >= 0) {
 	createCoefficientsInputs(defaultOrder);
 }
 
+const orderError = document.getElementById('order-error');
+const coeffError = document.getElementById('coeff-error');
 orderInput.addEventListener("input", function () {
 	var order = parseInt(this.value);
-	if (order >= 0) {
-		createCoefficientsInputs(order);
+	if (orderInput.value.trim() === '') {
+		orderError.style.display = 'inline';
+	} else {
+		orderError.style.display = 'none';
+		if (order >= 0) {
+			createCoefficientsInputs(order);
+		}
 	}
 });
 
@@ -40,25 +47,54 @@ function createCoefficientsInputs(order) {
 	}
 }
 
-
 function getCoefficients() {
 	var order = document.getElementById("order").value;
-	var coefficients = [];
-	for (var i = 0; i <= order; i++) {
-		coefficients.push(parseFloat(document.getElementById("s^" + i).value));
+	var outDiv = document.getElementById("outputDiv");
+	var ResDiv = document.getElementById("stabilityDiv");
+	var sep1 = document.getElementById("separator1");
+	var sep2 = document.getElementById("separator2");
+	if (orderInput.value.trim() === '') {
+		orderError.style.display = 'inline';
+		display(outDiv, ResDiv, sep1, sep2, 'hidden')
+	} else {
+		display(outDiv, ResDiv, sep1, sep2, 'visible')
+		orderError.style.display = 'none';
+		var coefficients = [];
+		var calc = true;
+		for (var i = 0; i <= order && calc; i++) {
+			coeffVal = parseFloat(document.getElementById("s^" + i).value);
+			if (isNaN(coeffVal)) {
+				calc = false;
+			} else {
+				coefficients.push(parseFloat(document.getElementById("s^" + i).value));
+			}
+		}
+		if (calc) {
+			coeffError.style.display = 'none';
+			display(outDiv, ResDiv, sep1, sep2, 'visible')
+			calculateRouthArray(coefficients, order);
+		} else {
+			coeffError.style.display = 'inline';
+			display(outDiv, ResDiv, sep1, sep2, 'hidden')
+		}
 	}
-	calculateRouthArray(coefficients);
+}
+
+function display(div1, div2, div3, div4, visibility) {
+	div1.style.visibility = visibility;
+	div2.style.visibility = visibility;
+	if (div3 !== null && div4 !== null) {
+		div3.style.visibility = visibility;
+		div4.style.visibility = visibility;
+	}
 }
 
 var clear1 = false, clear2 = false;
 
-function calculateRouthArray(coefficients) {
-	var order = document.getElementById("order").value;
+function calculateRouthArray(coefficients, order) {
 	var routhArray = [];
-
 	//to get system stability
 	var signChanges = 0, currSign;
-
 	// first 2 rows from the coeff
 	routhArray[0] = coefficients.filter(function (value, index) {
 		return index % 2 == 0;
@@ -103,7 +139,6 @@ function calculateRouthArray(coefficients) {
 			var l1 = routhArray[i - 2];
 			var l2 = routhArray[i - 1];
 			routhArray[i] = [];
-			console.log("col", cols);
 			for (var j = 0; j < cols - 1; j++) {
 				var res = ((pivot * l1[j + 1]) - (l1[0] * l2[j + 1])) / pivot;
 				routhArray[i].push(res);
@@ -157,6 +192,7 @@ function calculateRouthArray(coefficients) {
 
 		outputDiv.innerHTML = "";
 		const separator = document.createElement('hr');
+		separator.id = "separator1";
 		separator.style.borderTop = "2px solid white";
 		separator.style.marginTop = "20px";
 		separator.style.marginBottom = "20px";
@@ -194,6 +230,7 @@ function calculateRouthArray(coefficients) {
 		stabilityDiv.style.marginBottom = "100px"
 		stabilityDiv.style.borderRadius = "15px"
 		const separator2 = document.createElement('hr');
+		separator2.id = "separator2";
 		separator2.style.borderTop = "2px solid white";
 		separator2.style.marginTop = "20px";
 		separator2.style.marginBottom = "20px";
@@ -230,77 +267,3 @@ function calculateRouthArray(coefficients) {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 	routhArray[i] = [];
-
-	// 	// Calculate the first element of the row
-	// 	var a = routhArray[i - 1][0];
-	// 	var b = routhArray[i - 2][0];
-	// 	var c = coefficients[(i * 2) - 2];
-	// 	var d = coefficients[(i * 2) - 3];
-
-	// 	if (b === 0) {
-	// 		// Handle division by zero
-	// 		routhArray[i].push(0);
-	// 	} else {
-	// 		routhArray[i].push(-((c * b) - (d * a)) / b);
-	// 	}
-
-	// 	// Calculate the remaining elements of the row
-	// 	for (var j = 1; j < Math.ceil(i / 2); j++) {
-	// 		var a = routhArray[i - 1][j];
-	// 		var b = routhArray[i - 2][j];
-	// 		var c = coefficients[(i * 2) - (2 * j) - 2];
-	// 		var d = coefficients[(i * 2) - (2 * j) - 3];
-
-	// 		if (b === 0) {
-	// 			// Handle division by zero
-	// 			routhArray[i].push(0);
-	// 		} else {
-	// 			routhArray[i].push(-((c * b) - (d * a)) / b);
-	// 		}
-	// 	}
-
-	// 	// If i is even, add a zero to the row
-	// 	if (i % 2 === 0) {
-	// 		routhArray[i].push(0);
-	// 	}
-
-	// 	// Reverse the row
-	// 	routhArray[i] = routhArray[i].reverse();
-	// }
-
-	// // Display the Routh array
-	// var outputDiv = document.getElementById("outputDiv");
-	// Display the Routh array in the HTML
-
-
-
-	// var outputDiv = document.getElementById("outputDiv");
-	// outputDiv.innerHTML = "";
-	// for (let i = 0; i <= order; i++) {
-	//   const row = document.createElement("tr");
-	//   for (let j = 0; j < routhArray[i].length; j++) {
-	// 	const cell = document.createElement("td");
-	// 	const value = routhArray[i][j].toFixed(4);
-	// 	cell.textContent = value;
-	// 	row.appendChild(cell);
-	//   }
-	//   outputDiv.appendChild(row);
-	// }
