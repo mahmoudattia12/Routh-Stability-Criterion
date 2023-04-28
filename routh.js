@@ -1,4 +1,4 @@
-let epislon = 1e-9
+let epsilon = 1e-9
 var orderInput = document.getElementById("order");
 var defaultOrder = parseInt(orderInput.value);
 if (defaultOrder >= 0) {
@@ -167,7 +167,7 @@ function calculateRouthArray(coefficients, order) {
 				// }
 				// end = true;
 				// break;
-				routhArray[i - 1][0] = epislon;
+				routhArray[i - 1][0] = epsilon;
 				i--;
 			} else {
 				//handle case2 (entire row is zeros)
@@ -222,7 +222,7 @@ function calculateRouthArray(coefficients, order) {
 			for (let j = 0; j < routhArray[i].length; j++) {
 				const cell = document.createElement("td");
 				const value = routhArray[i][j].toFixed(4);
-				if(routhArray[i][j] == epislon) cell.textContent = "epislon"
+				if(routhArray[i][j] == epsilon) cell.textContent = "epsilon"
 				else	cell.textContent = value;
 				row.appendChild(cell);
 			}
