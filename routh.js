@@ -1,3 +1,4 @@
+let epislon = 1e-9
 var orderInput = document.getElementById("order");
 var defaultOrder = parseInt(orderInput.value);
 if (defaultOrder >= 0) {
@@ -149,21 +150,25 @@ function calculateRouthArray(coefficients, order) {
 			var case1 = false;
 			for (var j = 1; j < cols; j++) {
 				if (routhArray[i - 1][j] != 0) {
+					console.log("case1 is true")
 					case1 = true;
 					break;
 				}
 			}
 			if (case1) {
 				//handle case1 (pivot is zero)
-				coefficients.reverse();
-				//recursion
-				try {
-					calculateRouthArray(coefficients);
-				} catch (err) {
-					console.log("can't solve");
-				}
-				end = true;
-				break;
+				// coefficients.reverse();
+				// console.log("enter case1")
+				// //recursion
+				// try {
+				// 	calculateRouthArray(coefficients);
+				// } catch (err) {
+				// 	console.log("can't solve");
+				// }
+				// end = true;
+				// break;
+				routhArray[i - 1][0] = epislon;
+				i--;
 			} else {
 				//handle case2 (entire row is zeros)
 				var currOrder = order - (i - 2);
@@ -175,7 +180,6 @@ function calculateRouthArray(coefficients, order) {
 			}
 		}
 	}
-	//if not coming from recursion after case1 has been completely solved
 	if (!end) {
 		if (routhArray[order][0] >= 0) {
 			if (currSign == 'N') {
@@ -218,14 +222,15 @@ function calculateRouthArray(coefficients, order) {
 			for (let j = 0; j < routhArray[i].length; j++) {
 				const cell = document.createElement("td");
 				const value = routhArray[i][j].toFixed(4);
-				cell.textContent = value;
+				if(routhArray[i][j] == epislon) cell.textContent = "epislon"
+				else	cell.textContent = value;
 				row.appendChild(cell);
 			}
 			table.appendChild(row);
 		}
 		div.appendChild(table);
 		outputDiv.appendChild(div);
-		//view system stabilty (Results)
+		//view system stabilty
 		var div = document.createElement("div");
 		const stabilityDiv = document.getElementById("stabilityDiv");
 		stabilityDiv.style.background = "white"
